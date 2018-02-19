@@ -14,29 +14,29 @@ let d = new Date();
 let dateString = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()+"-"+d.getHours()+"-"+d.getMinutes()+" ";
 let fileUrl = url.replace(/(:\/\/|\.|\s|\/)/g,"_");
 let fileName = dateString + fileUrl + ".png";
-let baseline = "baseline " + fileUrl + ".png";
+let filePath = "output/" + fileName;
+let baseline = "baseline/" + fileUrl + ".png";
 
 (async () => {
 	const browser = await puppeteer.launch();
 	const page = await browser.newPage();
 	page.setViewport({width:1920,height:1080})
 	await page.goto(url);
-	
 	if(!fs.existsSync(baseline)){
 		console.log("No baseline found, now creating " + baseline);
 		await page.screenshot({path: baseline, fullPage: true});
 		await browser.close();
 		return;
 	}
-	await page.screenshot({path: fileName,fullPage: true});
+	await page.screenshot({path: filePath,fullPage: true});
 	await browser.close();
 	
 	let diff = new BlinkDiff({
-		imageAPath: fileName,
+		imageAPath: filePath,
 		imageBPath: baseline,
 		thresholdType: BlinkDiff.THRESHOLD_PERCENT,
 		threshold: 0,
-		imageOutputPath: fileName,
+		imageOutputPath: filePath,
 		composeLeftToRight: true
 	});
 	
@@ -50,7 +50,7 @@ let baseline = "baseline " + fileUrl + ".png";
 			} else{
 				console.log('\x1b[31mFAILED\x1b[0m ' + percent);
 			}
-			opn(fileName);
+			opn(filePath);
 		}
 	});
 })();
