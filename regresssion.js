@@ -5,6 +5,10 @@ const opn = require("opn");
 const args = process.argv.slice(2);
 
 let rawUrl = args[0];
+if(!rawUrl){
+	console.log("No URL provided");
+	return;
+}
 if(rawUrl.slice(0,4) != "http"){
 	url = "http://" + rawUrl;
 } else{
@@ -12,13 +16,13 @@ if(rawUrl.slice(0,4) != "http"){
 }
 let d = new Date();
 let dateString = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()+"-"+d.getHours()+"-"+d.getMinutes()+" ";
-let fileUrl = url.replace(/(:\/\/|\.|\s|\/)/g,"_");
+let fileUrl = url.replace(/\/$/,"").replace(/(:\/\/|\.|\s|\/)/g,"_");
 let fileName = dateString + fileUrl + ".png";
 let filePath = "output/" + fileName;
 let baseline = "baseline/" + fileUrl + ".png";
 
 (async () => {
-	const browser = await puppeteer.launch();
+	const browser = await puppeteer.launch({ignoreHTTPSErrors:true});
 	const page = await browser.newPage();
 	page.setViewport({width:1920,height:1080})
 	await page.goto(url);
