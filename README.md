@@ -8,7 +8,8 @@ $ node regression [URL]
 If there's no baseline file it will create it in a baseline folder
 If there is a baseline it will create a comparison image in the output folder
 
-#Create Custom Test Suites
+# Create Custom Test Suites
+Example
 ```<language>
 const regression = require("./regression-export");
 
