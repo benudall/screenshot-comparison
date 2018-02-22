@@ -16,7 +16,8 @@ const regression = require("./regression-export");
 (async () => {
 	await regression.init();
 	await regression.test("http://example.com");
-  await regression.test("http://example.com");
+	await regression.test("http://google.com");
+	await regression.test("http://wikipedia.org");
 	await regression.end();
 })();
 ```
